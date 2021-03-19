@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class Rover {
 
         this.bitmaps = new ArrayList<Bitmap>();
 
-        bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover));
+
         bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover0));
         bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover1));
         bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover2));
@@ -41,7 +42,7 @@ public class Rover {
         bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover5));
         bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover6));
         bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover7));
-
+        bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover));
     }
 
     public void draw(Canvas canvas) {
@@ -76,6 +77,9 @@ public class Rover {
             case UPLEFT:
                 toDraw = this.bitmaps.get(7);
                 break;
+            case NONE:
+                toDraw = this.bitmaps.get(8);
+                break;
             default:
                 toDraw = bmpRover;
         }
@@ -108,7 +112,9 @@ public class Rover {
     }
 
     public Direction getDirection() {
-        float treshold = 0.1f;
+        Log.d("1", String.valueOf(this.speed.getY()));
+        Log.d("1", String.valueOf(this.speed.getX()));
+        float treshold = 30f;
         if (this.speed.getX() > treshold) {
             if (this.speed.getY() > treshold) {
                 return Direction.DOWNRIGHT;
@@ -127,8 +133,10 @@ public class Rover {
             }
         } else if (this.speed.getY() > treshold) {
             return Direction.DOWN;
-        } else {
+        } else if (this.speed.getY() < treshold * -1) {
             return Direction.UP;
+        } else {
+            return Direction.NONE;
         }
     }
 
