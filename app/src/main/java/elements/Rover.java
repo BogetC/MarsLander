@@ -13,7 +13,6 @@ public class Rover {
 
     private Position position;
     private Speed speed;
-    private Direction direction;
 
     public Rover(Position initialPosition, int size) {
         this.size = size;
@@ -23,7 +22,7 @@ public class Rover {
 
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.BLACK);
         canvas.drawRect(this.position.getX(), this.position.getY(),
                 this.position.getX() + this.size,
                 this.position.getY() + this.size, paint

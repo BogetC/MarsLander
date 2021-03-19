@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     TextView counterTV;
     View menuLayout;
     private Sensors sensors;
+    private GameView gameView;
     private Runnable count = () -> {
         this.counter_time--;
         this.counterTV.setText(String.valueOf(this.counter_time));
@@ -44,9 +46,14 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GameView gameView = new GameView(this);
+        this.gameView = new GameView(this);
         setContentView(R.layout.activity_main);
 
+        FrameLayout gameLayout = (FrameLayout) findViewById(R.id.app_layout);
+        gameLayout.addView(gameView);
+
+        LinearLayout menuLayout = (LinearLayout) findViewById(R.id.menu_layout);
+        menuLayout.bringToFront();
         this.handler = new Handler();
         this.counterTV = (TextView) findViewById(R.id.counter_text_view);
         this.menuLayout = (View) findViewById(R.id.menu_layout);
@@ -99,7 +106,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     public void startGame() {
-
+        this.gameView.setPaused(false);
     }
 
     private void fadeMenu() {
