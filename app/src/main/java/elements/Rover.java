@@ -1,9 +1,14 @@
 package elements;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
+import helloandroid.m2dl.marslander.R;
 import models.Direction;
 import models.Position;
 import models.Speed;
@@ -14,19 +19,26 @@ public class Rover {
     private Position position;
     private Speed speed;
 
-    public Rover(Position initialPosition, int size) {
+    private Bitmap bmpRover, bmpRoverSide, bmpRoverCorner;
+
+    public Rover(Position initialPosition, int size, Context context) {
         this.size = size;
         this.position = initialPosition;
         this.speed = new Speed(0, 0);
+
+        this.bmpRover = BitmapFactory.decodeResource(context.getResources(), R.drawable.rover);
+        this.bmpRoverSide = BitmapFactory.decodeResource(context.getResources(), R.drawable.rover_side);
+        this.bmpRoverCorner = BitmapFactory.decodeResource(context.getResources(), R.drawable.rover_corner);
     }
 
     public void draw(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
-        canvas.drawRect(this.position.getX(), this.position.getY(),
-                this.position.getX() + this.size,
-                this.position.getY() + this.size, paint
-        );
+        Rect rect = new Rect(this.position.getX() - this.size/2,
+                this.position.getY() - this.size/2,
+                this.position.getX() + this.size/2,
+                this.position.getY() + this.size/2);
+
+        canvas.drawBitmap(bmpRover, new Rect(0,0,bmpRover.getWidth(),bmpRover.getHeight()), rect, null);
+
     }
 
     public int getSize() {
