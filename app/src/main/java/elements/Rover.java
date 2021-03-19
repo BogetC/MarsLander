@@ -8,6 +8,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import helloandroid.m2dl.marslander.R;
 import models.Direction;
 import models.Position;
@@ -21,23 +24,62 @@ public class Rover {
 
     private Bitmap bmpRover, bmpRoverSide, bmpRoverCorner;
 
+    private List<Bitmap> bitmaps;
     public Rover(Position initialPosition, int size, Context context) {
         this.size = size;
         this.position = initialPosition;
         this.speed = new Speed(0, 0);
 
-        this.bmpRover = BitmapFactory.decodeResource(context.getResources(), R.drawable.rover);
-        this.bmpRoverSide = BitmapFactory.decodeResource(context.getResources(), R.drawable.rover_side);
-        this.bmpRoverCorner = BitmapFactory.decodeResource(context.getResources(), R.drawable.rover_corner);
+        this.bitmaps = new ArrayList<Bitmap>();
+
+        bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover));
+        bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover0));
+        bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover1));
+        bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover2));
+        bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover3));
+        bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover4));
+        bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover5));
+        bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover6));
+        bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover7));
+
     }
 
     public void draw(Canvas canvas) {
-        Rect rect = new Rect(this.position.getX() - this.size/2,
-                this.position.getY() - this.size/2,
-                this.position.getX() + this.size/2,
-                this.position.getY() + this.size/2);
+        Rect rect = new Rect(this.position.getX(),
+                this.position.getY(),
+                this.position.getX() + this.size,
+                this.position.getY() + this.size);
 
-        canvas.drawBitmap(bmpRover, new Rect(0,0,bmpRover.getWidth(),bmpRover.getHeight()), rect, null);
+        Bitmap toDraw = null;
+        switch (this.getDirection()) {
+            case UP:
+                toDraw = this.bitmaps.get(0);
+                break;
+            case UPRIGHT:
+                toDraw = this.bitmaps.get(1);
+                break;
+            case RIGHT:
+                toDraw = this.bitmaps.get(2);
+                break;
+            case DOWNRIGHT:
+                toDraw = this.bitmaps.get(3);
+                break;
+            case DOWN:
+                toDraw = this.bitmaps.get(4);
+                break;
+            case DOWNLEFT:
+                toDraw = this.bitmaps.get(5);
+                break;
+            case LEFT:
+                toDraw = this.bitmaps.get(6);
+                break;
+            case UPLEFT:
+                toDraw = this.bitmaps.get(7);
+                break;
+            default:
+                toDraw = bmpRover;
+        }
+        canvas.drawBitmap(toDraw, new Rect(0,0,toDraw.getWidth(),toDraw.getHeight()), rect, null);
 
     }
 
@@ -66,7 +108,7 @@ public class Rover {
     }
 
     public Direction getDirection() {
-        float treshold = 0.0f;
+        float treshold = 0.1f;
         if (this.speed.getX() > treshold) {
             if (this.speed.getY() > treshold) {
                 return Direction.DOWNRIGHT;
