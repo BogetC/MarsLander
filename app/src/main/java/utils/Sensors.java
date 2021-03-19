@@ -114,7 +114,13 @@ public class Sensors {
 
     public void calcLightSensorCover(float value) {
         float cover = 100 - (((value / getMaxValueLightSensor()) - getCoveredValueLightSensor()) * 100);
-        this.lightSensorCover = (0 < cover && cover < 94) ? cover : (cover < 0 ? 0 : 94);
+        if (cover < 0) {
+            this.lightSensorCover = 0;
+        } else if (cover > 94) {
+            this.lightSensorCover = 94;
+        } else {
+            this.lightSensorCover = cover;
+        }
     }
 
     public float getCoveredValueLightSensor() {
