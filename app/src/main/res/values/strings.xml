@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MarsLander</string>
+    <string name="home_instruction">Put your finger on the light sensor</string>
+    <string name="waiting">Waiting...</string>
 </resources>
