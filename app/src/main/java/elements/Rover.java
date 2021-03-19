@@ -12,6 +12,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import helloandroid.m2dl.marslander.GameView;
 import helloandroid.m2dl.marslander.R;
 import models.Direction;
 import models.Position;
@@ -23,16 +24,19 @@ public class Rover {
     private Position position;
     private Speed speed;
 
-    private Bitmap bmpRover, bmpRoverSide, bmpRoverCorner;
+    private Bitmap bitmapBg;
+    private GameView gameView;
 
     private List<Bitmap> bitmaps;
-    public Rover(Position initialPosition, int size, Context context) {
+    public Rover(Position initialPosition, int size, Context context, GameView gameView) {
         this.size = size;
         this.position = initialPosition;
         this.speed = new Speed(0, 0);
+        this.gameView = gameView;
+
+        this.bitmapBg = BitmapFactory.decodeResource(context.getResources(), R.drawable.mars);
 
         this.bitmaps = new ArrayList<Bitmap>();
-
 
         bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover0));
         bitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.rover1));
@@ -46,6 +50,9 @@ public class Rover {
     }
 
     public void draw(Canvas canvas) {
+        Rect rectBg = new Rect(0, 0, gameView.getWidth(), gameView.getHeight());
+        canvas.drawBitmap(bitmapBg, new Rect(0,0, bitmapBg.getWidth(), bitmapBg.getHeight()), rectBg, null);
+
         Rect rect = new Rect(this.position.getX(),
                 this.position.getY(),
                 this.position.getX() + this.size,
@@ -81,7 +88,7 @@ public class Rover {
                 toDraw = this.bitmaps.get(8);
                 break;
             default:
-                toDraw = bmpRover;
+                toDraw = this.bitmaps.get(8);
         }
         canvas.drawBitmap(toDraw, new Rect(0,0,toDraw.getWidth(),toDraw.getHeight()), rect, null);
 
