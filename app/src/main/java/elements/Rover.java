@@ -50,8 +50,29 @@ public class Rover {
     }
 
     public void draw(Canvas canvas) {
-        Rect rectBg = new Rect(0, 0, gameView.getWidth(), gameView.getHeight());
-        canvas.drawBitmap(bitmapBg, new Rect(0,0, bitmapBg.getWidth(), bitmapBg.getHeight()), rectBg, null);
+        float altMult = ((gameView.getMaxAltitude() - gameView.getAltitude()) / gameView.getMaxAltitude()) * 9/10;
+
+        float delta = (gameView.getHeight() - bitmapBg.getHeight() * gameView.getWidth() / bitmapBg.getWidth()) / 2;
+
+        Rect rectBg = new Rect(
+                0,
+                (int) (delta),
+                gameView.getWidth(),
+                gameView.getHeight() - (int) (delta)
+        );
+
+        System.out.println("ALTITUDE : " + gameView.getAltitude());
+
+        canvas.drawBitmap(
+                bitmapBg,
+                new Rect(
+                        (int) (0 + (altMult/2 * bitmapBg.getWidth())),
+                        (int) (0 + (altMult/2 * bitmapBg.getHeight())),
+                        (int) (bitmapBg.getWidth() - (altMult/2 * bitmapBg.getWidth())),
+                        (int) (bitmapBg.getHeight() -(altMult/2 * bitmapBg.getHeight()))
+                ),
+                rectBg,
+                null);
 
         Rect rect = new Rect(this.position.getX(),
                 this.position.getY(),

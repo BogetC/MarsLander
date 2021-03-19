@@ -51,7 +51,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private long startTime;
     private long endTime;
     private final float maxAltitude = 10000; // m
-    private float currentAltitude = this.maxAltitude; // m
+//    private float currentAltitude = this.maxAltitude; // m
     private Paint altitudePaint = new Paint();
 
     private float altitude;
@@ -119,6 +119,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     this.a0 = 11;
                 }
                 this.altitude = (int) (this.altitude - this.v0 * 0.1 + 1/2 * this.a0 * Math.sqrt(0.1));
+                if (this.altitude > this.maxAltitude) {
+                    this.altitude = this.maxAltitude;
+                }
                 this.v0 = (int) (this.v0 + this.a0 * 0.1);
                 Log.d("D", String.valueOf(altitude));
             }
@@ -229,5 +232,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void setThrust(float thrust) {
         this.thrust = thrust;
+    }
+
+    public float getMaxAltitude() {
+        return this.maxAltitude;
+    }
+
+    public float getAltitude() {
+        return this.altitude;
     }
 }
