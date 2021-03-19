@@ -30,8 +30,8 @@ import threads.GameThread;
 import utils.Physics;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
-    private Position roverPosition;
     private Rover rover;
+    private Position roverPosition;
     private GameThread gameThread;
 
     private boolean paused;
@@ -47,11 +47,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private Context context;
 
+    private float thrust;
     private long startTime;
     private long endTime;
     private final float maxAltitude = 10000; // m
     private float currentAltitude = this.maxAltitude; // m
     private Paint altitudePaint = new Paint();
+
+    private float altitude;
+    private float v0;
+    private float a0;
 
     public GameView(Context context, int screenWidth, int screenHeight) {
         super(context);
@@ -61,6 +66,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.waX = 0;
         this.waY = 0;
 
+        this.altitude = 10000;
+        this.v0 = 10;
+        this.a0 = 10;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight + 70;
 
@@ -90,24 +98,43 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
+        Typeface tf = ResourcesCompat.getFont(getContext(), R.font.orbitron_medium);
+        Paint paint = new Paint();
+        paint.setTextSize(30);
+        paint.setColor(Color.RED);
+        paint.setTypeface(tf);
+        paint.setTextAlign(Paint.Align.CENTER);
+
         if (canvas != null) {
             canvas.drawColor(Color.WHITE);
             if (this.waX != 0) {
-                Typeface tf = ResourcesCompat.getFont(getContext(), R.font.orbitron_medium);
-                Paint paint = new Paint();
-                paint.setTextSize(30);
-                paint.setColor(Color.RED);
-                paint.setTypeface(tf);
-                paint.setTextAlign(Paint.Align.CENTER);
                 canvas.drawText("CAUTION: WIND", this.screenWidth /2, 45, paint);
             }
+
+            if (!this.paused) {
+                Log.d("1", String.valueOf(this.v0));
+                if (this.thrust < 30) {
+                    this.a0 = -20;
+                } else {
+                    this.a0 = 11;
+                }
+                this.altitude = (int) (this.altitude - this.v0 * 0.1 + 1/2 * this.a0 * Math.sqrt(0.1));
+                this.v0 = (int) (this.v0 + this.a0 * 0.1);
+                Log.d("D", String.valueOf(altitude));
+            }
+
             this.rover.draw(canvas);
             if (!this.paused) {
                 this.currentAltitude = this.currentAltitude - 0.1F;
                 if (this.currentAltitude <= 0) {
-                    this.finishGame();
+                    if (this.v0 > -2000) {
+                        this.finishGame();
+                    } else {
+                        this.crash();
+                    }
+
                 }
-                canvas.drawText("Altitude: " + currentAltitude + "m", 30, 50, altitudePaint);
+                canvas.drawText("Altitude: " + this.altitude + "m", 30, this.screenHeight - 100, altitudePaint);
             }
         }
 
@@ -198,5 +225,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.gameThread.setRunning(false);
         Intent intent = new Intent(this.context, FailToLandActivity.class);
         this.context.startActivity(intent);
+    }
+
+    public void setThrust(float thrust) {
+        this.thrust = thrust;
     }
 }
