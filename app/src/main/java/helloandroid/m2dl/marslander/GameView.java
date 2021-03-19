@@ -97,12 +97,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        try {
-            gameThread.setRunning(false);
-            gameThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        gameThread.setRunning(false);
     }
 
     public void updateAcceleration(int x, int y) {
@@ -116,6 +111,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void finishGame() {
+        this.gameThread.setRunning(false);
         Intent intent = new Intent(this.context, ScoreActivity.class);
         this.context.startActivity(intent);
     }

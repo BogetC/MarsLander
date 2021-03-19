@@ -33,11 +33,13 @@ public class ScoreActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        System.out.println("HEHE");
         setContentView(R.layout.activity_score);
         Button playAgainButton = findViewById(R.id.playAgainButton);
         playAgainButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            Intent intentReplay = new Intent(this, MainActivity.class);
+            startActivity(intentReplay);
         });
     }
 

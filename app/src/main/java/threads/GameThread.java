@@ -13,11 +13,9 @@ public class GameThread extends Thread{
     private Canvas canvas;
 
     public GameThread(SurfaceHolder surfaceHolder, GameView gameView) {
-
         super();
         this.surfaceHolder = surfaceHolder;
         this.gameView = gameView;
-
     }
 
     public void setRunning(boolean isRunning) {
