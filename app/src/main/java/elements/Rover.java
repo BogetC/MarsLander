@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import models.Direction;
 import models.Position;
 import models.Speed;
 
@@ -12,6 +13,7 @@ public class Rover {
 
     private Position position;
     private Speed speed;
+    private Direction direction;
 
     public Rover(Position initialPosition, int size) {
         this.size = size;
@@ -50,5 +52,21 @@ public class Rover {
 
     public void setSpeed(Speed speed) {
         this.speed = speed;
+    }
+
+    public Direction getDirection() {
+        if (Math.abs(this.getSpeed().getX()) > Math.abs(this.getSpeed().getY())) {
+            if (this.speed.getX() > 0) {
+                return Direction.RIGHT;
+            } else {
+                return Direction.LEFT;
+            }
+        } else {
+            if (this.speed.getY() > 0) {
+                return Direction.DOWN;
+            } else {
+                return Direction.UP;
+            }
+        }
     }
 }
