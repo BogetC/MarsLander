@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -14,7 +12,8 @@ import androidx.annotation.NonNull;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
-   private GameThread thread;
+    private GameThread thread;
+    private int x;
 
     public GameView(Context context) {
         super(context);
@@ -24,6 +23,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         thread = new GameThread(getHolder(), this);
 
         setFocusable(true);
+
+        x = 100;
     }
 
     @Override
@@ -34,7 +35,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-
     }
 
     @Override
@@ -52,17 +52,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update() {
+        x = (x + 10) % 1000;
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         if (canvas != null) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
-            Rect dest = new Rect(100, 100, 1000, 1000);
+            Bitmap bitmap =  BitmapFactory.decodeResource(getResources(), R.drawable.logopng);
+            Rect dest = new Rect(x, 100, x+500, 600);
             canvas.drawBitmap(bitmap, null, dest, null);
-
             canvas.drawRect(dest, null);
         }
+
     }
 }
