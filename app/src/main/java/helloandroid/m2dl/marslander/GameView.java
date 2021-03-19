@@ -11,8 +11,13 @@ import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
+
+import java.util.Date;
+import java.util.TimerTask;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.Random;
@@ -42,9 +47,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private Context context;
 
-    private int time;
-    private final int maxAltitude = 10000;
-    private int currentAltitude = this.maxAltitude;
+    private long startTime;
+    private long endTime;
+    private final float maxAltitude = 10000; // m
+    private float currentAltitude = this.maxAltitude; // m
+    private Paint altitudePaint = new Paint();
 
     public GameView(Context context, int screenWidth, int screenHeight) {
         super(context);
@@ -57,8 +64,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight + 70;
 
-
-
         int roverSize = 120;
         int xRover = screenWidth / 2 - roverSize / 2;
         int yRover = (int) (screenHeight / 1.61 - roverSize / 2);
@@ -66,6 +71,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.rover = new Rover(new Position(xRover, yRover), roverSize, context);
         this.gameThread = new GameThread(getHolder(), this);
         this.paused = true;
+
+        Typeface tf = ResourcesCompat.getFont(this.context, R.font.orbitron_medium);
+        altitudePaint.setTextSize(50);
+        altitudePaint.setColor(Color.RED);
+        altitudePaint.setTypeface(tf);
+        altitudePaint.setTextAlign(Paint.Align.LEFT);
     }
 
     private Runnable resetWind = new Runnable() {
@@ -91,6 +102,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 canvas.drawText("CAUTION: WIND", this.screenWidth /2, 45, paint);
             }
             this.rover.draw(canvas);
+            if (!this.paused) {
+                this.currentAltitude = this.currentAltitude - 0.1F;
+                if (this.currentAltitude <= 0) {
+                    this.finishGame();
+                }
+                canvas.drawText("Altitude: " + currentAltitude + "m", 30, 50, altitudePaint);
+            }
         }
 
         try {
@@ -109,7 +127,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             rover.setSpeed(newSpeed);
 
             if (!this.rover.getPosition().isBetween(0, this.screenWidth - this.rover.getSize(), 0, this.screenHeight - this.rover.getSize())) {
-                this.finishGame();
+                this.crash();
             }
 
             // Spawn wind
@@ -164,9 +182,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void finishGame() {
+        this.endTime = new Date().getTime();
+        long score = this.endTime - this.startTime;
         this.gameThread.setRunning(false);
         Intent intent = new Intent(this.context, ScoreActivity.class);
+        intent.putExtra("score", score / 1000);
         this.context.startActivity(intent);
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 
     public void crash() {

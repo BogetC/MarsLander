@@ -23,6 +23,10 @@ import android.widget.TextView;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import utils.Sensors;
 
 public class MainActivity extends Activity implements SensorEventListener {
@@ -118,6 +122,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     public void startGame() {
         this.gameView.setPaused(false);
+        this.gameView.setStartTime(new Date().getTime());
     }
 
     private void fadeMenu() {

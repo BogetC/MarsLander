@@ -33,8 +33,6 @@ public class ScoreActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        System.out.println("HEHE");
         setContentView(R.layout.activity_score);
         Button playAgainButton = findViewById(R.id.playAgainButton);
         playAgainButton.setOnClickListener(v -> {
@@ -47,8 +45,7 @@ public class ScoreActivity extends Activity implements View.OnClickListener {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         Intent intent = getIntent();
-        // int scoreValue = (int) intent.getSerializableExtra("score");
-        int scoreValue = 744;
+        long scoreValue = intent.getLongExtra("score", 0);
         this.score.setUsername("You");
         this.score.setScore(scoreValue);
         this.scores = new ArrayList<>();
@@ -68,15 +65,15 @@ public class ScoreActivity extends Activity implements View.OnClickListener {
                     int scoresSize = self.scores.size();
                     if (scoresSize > 0) {
                         TextView hs1 = findViewById(R.id.hs1Label);
-                        hs1.setText(self.scores.get(0).getUsername() + ": " + self.scores.get(0).getScore());
+                        hs1.setText(self.scores.get(0).getUsername() + ": " + self.scores.get(0).getScore() + "s");
                     }
                     if (scoresSize > 1) {
                         TextView hs2 = findViewById(R.id.hs2Label);
-                        hs2.setText(self.scores.get(1).getUsername() + ": " + self.scores.get(1).getScore());
+                        hs2.setText(self.scores.get(1).getUsername() + ": " + self.scores.get(1).getScore() + "s");
                     }
                     if (scoresSize > 2) {
                         TextView hs3 = findViewById(R.id.hs3Label);
-                        hs3.setText(self.scores.get(2).getUsername() + ": " + self.scores.get(2).getScore());
+                        hs3.setText(self.scores.get(2).getUsername() + ": " + self.scores.get(2).getScore() + "s");
                     }
                 }
             }
