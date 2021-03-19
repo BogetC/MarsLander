@@ -54,18 +54,27 @@ public class Rover {
     }
 
     public Direction getDirection() {
-        if (Math.abs(this.getSpeed().getX()) > Math.abs(this.getSpeed().getY())) {
-            if (this.speed.getX() > 0) {
+        float treshold = 0.0f;
+        if (this.speed.getX() > treshold) {
+            if (this.speed.getY() > treshold) {
+                return Direction.DOWNRIGHT;
+            } else if (this.speed.getY() < treshold * -1) {
+                return Direction.UPRIGHT;
+            } else {
                 return Direction.RIGHT;
+            }
+        } else if (this.speed.getX() < treshold * -1) {
+            if (this.speed.getY() > treshold) {
+                return Direction.DOWNLEFT;
+            } else if (this.speed.getY() < treshold * -1){
+                return Direction.UPLEFT;
             } else {
                 return Direction.LEFT;
             }
+        } else if (this.speed.getY() > treshold) {
+            return Direction.DOWN;
         } else {
-            if (this.speed.getY() > 0) {
-                return Direction.DOWN;
-            } else {
-                return Direction.UP;
-            }
+            return Direction.UP;
         }
     }
 
