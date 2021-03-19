@@ -66,9 +66,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         int roverSize = 120;
         int xRover = screenWidth / 2 - roverSize / 2;
-        int yRover = (int) (screenHeight / 1.61 - roverSize / 2);
+        int yRover = (int) (screenHeight / 1.6 - roverSize / 2);
 
-        this.rover = new Rover(new Position(xRover, yRover), roverSize, context);
+        this.rover = new Rover(new Position(xRover, yRover), roverSize, context, this);
         this.gameThread = new GameThread(getHolder(), this);
         this.paused = true;
 
