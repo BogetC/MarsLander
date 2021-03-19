@@ -5,8 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -26,10 +28,25 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private int aX;
     private int aY;
 
-    public GameView(Context context) {
+    private int screenWidth;
+    private int screenHeight;
+
+    public GameView(Context context, int screenWidth, int screenHeight) {
         super(context);
         getHolder().addCallback(this);
-        this.rover = new Rover(new Position(50, 50), 120);
+
+        this.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight + 70;
+
+
+        int roverSize = 120;
+        int xRover = screenWidth / 2 - roverSize / 2;
+        int yRover = screenHeight / 2 - roverSize / 2;
+
+        this.rover = new Rover(new Position(xRover, yRover), roverSize);
         this.gameThread = new GameThread(getHolder(), this);
         this.paused = true;
     }
@@ -41,13 +58,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if (canvas != null) {
             canvas.drawColor(Color.WHITE);
             this.rover.draw(canvas);
-            if (!paused) {
-                Position newPosition = Physics.updatePosition(rover.getPosition(), rover.getSpeed(), aX, aY, 0.1f);
-                Speed newSpeed = Physics.updateSpeed(rover.getSpeed(), aX, aY, 0.1f);
-
-                rover.setPosition(newPosition);
-                rover.setSpeed(newSpeed);
-            }
         }
 
         try {
@@ -57,6 +67,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    public void updateRover() {
+        if (!paused) {
+            Position newPosition = Physics.updatePosition(rover.getPosition(), rover.getSpeed(), aX, aY, 0.1f);
+            Speed newSpeed = Physics.updateSpeed(rover.getSpeed(), aX, aY, 0.1f);
+
+            rover.setPosition(newPosition);
+            rover.setSpeed(newSpeed);
+
+            if (!this.rover.getPosition().isBetween(0, this.screenWidth - this.rover.getSize(), 0, this.screenHeight - this.rover.getSize())) {
+                this.finishGame();
+            }
+        }
+    }
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         gameThread.setRunning(true);
@@ -79,11 +102,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void updateAcceleration(int x, int y) {
+        // Bring accelerations value in [10;20] range
         this.aX = x * 10;
         this.aY = y * 10;
     }
 
     public void setPaused(boolean paused) {
         this.paused = paused;
+    }
+
+    public void finishGame() {
+        this.setPaused(true);
     }
 }

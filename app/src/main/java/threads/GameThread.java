@@ -33,6 +33,7 @@ public class GameThread extends Thread{
                 canvas = this.surfaceHolder.lockCanvas();
                 synchronized(surfaceHolder) {
                     this.gameView.draw(canvas);
+                    this.gameView.updateRover();
                 }
             } catch (Exception e) {}
             finally {

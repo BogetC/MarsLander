@@ -11,6 +11,7 @@ public final class Physics {
         return new Position(x1, y1);
     }
 
+    // This is sketchy but it works
     public static Speed updateSpeed(Speed s, int ax, int ay, float t) {
         int Vx = (int) (s.getX() + ax * t);
         int Vy = (int) (s.getY() + ay * t);
