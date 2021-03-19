@@ -59,12 +59,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         if (canvas != null) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
-            Rect dest = new Rect(100, 100, 600, 600);
-            canvas.drawBitmap(bitmap, new Rect(0,0,500,500), dest, null);
+            Rect dest = new Rect(100, 100, 1000, 1000);
+            canvas.drawBitmap(bitmap, null, dest, null);
 
-            Paint paint = new Paint();
-            paint.setColor(Color.rgb(250,0,0));
-            canvas.drawRect(dest, paint);
+            canvas.drawRect(dest, null);
         }
     }
 }
