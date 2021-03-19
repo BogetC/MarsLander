@@ -112,8 +112,6 @@ public class Rover {
     }
 
     public Direction getDirection() {
-        Log.d("1", String.valueOf(this.speed.getY()));
-        Log.d("1", String.valueOf(this.speed.getX()));
         float treshold = 30f;
         if (this.speed.getX() > treshold) {
             if (this.speed.getY() > treshold) {
