@@ -20,7 +20,7 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/orbitron_medium"
             android:text="@string/app_name"
@@ -35,15 +35,17 @@
             android:text="@string/home_instruction"
             android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/counter_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:id="@+id/circularProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
             android:layout_marginTop="70dp"
-            android:fontFamily="@font/orbitron_medium"
-            android:gravity="center_horizontal"
-            android:text="@string/waiting"
-            android:textSize="24sp" />
+            app:cpb_background_progressbar_color="#D5D5D5"
+            app:cpb_background_progressbar_width="5dp"
+            app:cpb_progress_direction="to_right"
+            app:cpb_progressbar_color="@color/primary"
+            app:cpb_progressbar_width="10dp"
+            app:cpb_round_border="true" />
 
     </LinearLayout>
 

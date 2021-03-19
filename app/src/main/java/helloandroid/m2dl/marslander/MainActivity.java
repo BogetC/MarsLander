@@ -1,19 +1,15 @@
 package helloandroid.m2dl.marslander;
 
+import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -21,19 +17,24 @@ import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+
 
 import utils.Sensors;
 
 public class MainActivity extends Activity implements SensorEventListener {
     private Handler handler;
     private int counter_time;
-    TextView counterTV;
-    View menuLayout;
     private Sensors sensors;
     private GameView gameView;
+    private CircularProgressBar circularProgressBar;
+    private View menuLayout;
+
     private Runnable count = () -> {
         this.counter_time--;
-        this.counterTV.setText(String.valueOf(this.counter_time));
+        float counterMax = (float) getResources().getInteger(R.integer.counter_max);
+        float progressPourcentage = ((counterMax - this.counter_time) / counterMax) * 100;
+        this.circularProgressBar.setProgressWithAnimation(progressPourcentage, 1000l);
 
         if (this.counter_time == 0) {
             this.fadeMenu();
@@ -55,8 +56,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         LinearLayout menuLayout = (LinearLayout) findViewById(R.id.menu_layout);
         menuLayout.bringToFront();
         this.handler = new Handler();
-        this.counterTV = (TextView) findViewById(R.id.counter_text_view);
         this.menuLayout = (View) findViewById(R.id.menu_layout);
+        this.circularProgressBar = findViewById(R.id.circularProgressBar);
         this.startCounter();
         this.sensors = new Sensors(((SensorManager) getSystemService(Context.SENSOR_SERVICE)), gameView);
         this.sensors.setLightSensor(this.sensors.getSensorManager().getDefaultSensor(Sensor.TYPE_LIGHT));
@@ -91,17 +92,16 @@ public class MainActivity extends Activity implements SensorEventListener {
             default :
                 break;
         }
-        // other sensors
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        
+
     }
 
     public void startCounter() {
         this.counter_time = getResources().getInteger(R.integer.counter_max);
-        this.counterTV.setText(String.valueOf(this.counter_time));
+        this.circularProgressBar.setProgress(0);
         this.handler.postDelayed(this.count, 1000);
     }
 
