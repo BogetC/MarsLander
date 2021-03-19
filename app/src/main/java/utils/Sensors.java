@@ -101,6 +101,7 @@ public class Sensors {
         checkMaxValueLightSensor(value);
         calcLightSensorCover(value);
         System.out.println("COVER : " + this.lightSensorCover + "%");
+        this.gameView.setThrust(value);
         if(isCoveredLightSensor(value)) {
             updateCoveredLightSensorValues(value);
         } else {
