@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
-                android:hint="Enter yout username..."
+                android:hint="Enter your username..."
                 android:inputType="text"
                 tools:layout_conversion_absoluteHeight="56dp"
                 tools:layout_conversion_absoluteWidth="531dp"

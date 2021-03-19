@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 
 import elements.Rover;
 import models.Position;
+import models.Score;
 import models.Speed;
 import threads.GameThread;
 import utils.Physics;
@@ -110,6 +111,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void finishGame() {
         this.gameThread.setRunning(false);
         Intent intent = new Intent(this.context, ScoreActivity.class);
+        this.context.startActivity(intent);
+    }
+
+    public void crash() {
+        this.gameThread.setRunning(false);
+        Intent intent = new Intent(this.context, FailToLandActivity.class);
         this.context.startActivity(intent);
     }
 }
