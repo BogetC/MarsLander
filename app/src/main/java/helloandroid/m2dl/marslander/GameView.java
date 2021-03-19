@@ -125,8 +125,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
             this.rover.draw(canvas);
             if (!this.paused) {
-                this.currentAltitude = this.currentAltitude - 0.1F;
-                if (this.currentAltitude <= 0) {
+                this.altitude = this.altitude - 0.1F;
+                if (this.altitude <= 0) {
                     if (this.v0 > -2000) {
                         this.finishGame();
                     } else {
