@@ -28,4 +28,24 @@ public class Position {
         this.x = x;
         this.y = y;
     }
+
+    public void addX(int distance) {
+        this.x += distance;
+    }
+
+    public void addY(int distance) {
+        this.y += distance;
+    }
+
+    public void substractX(int distance) {
+        this.x -= distance;
+    }
+
+    public void subsctractY(int distance) {
+        this.y -= distance;
+    }
+
+    public boolean isBetween(int x1, int x2, int y1, int y2) {
+        return (this.x >= x1 && this.x <= x2) && (this.y >= y1 && this.y <= y2);
+    }
 }
