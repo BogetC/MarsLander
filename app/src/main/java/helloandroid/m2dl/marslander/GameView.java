@@ -1,30 +1,44 @@
 package helloandroid.m2dl.marslander;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Rect;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.view.Display;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
-public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+public class GameView extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
 
     private GameThread thread;
-    private int x;
+    private Context context;
+    private Vibrator vibrator;
+    private int i;
+
 
     public GameView(Context context) {
         super(context);
-
         getHolder().addCallback(this);
+
+        this.context = context;
+
+        this.setOnTouchListener(this);
 
         thread = new GameThread(getHolder(), this);
 
         setFocusable(true);
 
-        x = 100;
+        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
+        i = 0;
+
     }
 
     @Override
@@ -52,18 +66,25 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update() {
-        x = (x + 10) % 1000;
-    }
+        i = (i + 1) % 1000;
+        }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         if (canvas != null) {
-            Bitmap bitmap =  BitmapFactory.decodeResource(getResources(), R.drawable.logopng);
-            Rect dest = new Rect(x, 100, x+500, 600);
-            canvas.drawBitmap(bitmap, null, dest, null);
-            canvas.drawRect(dest, null);
+            canvas.drawColor(Color.WHITE);
+            Paint textPaint = new Paint();
+            textPaint.setColor(Color.BLACK);
+            textPaint.setTextSize(100);
+            canvas.drawText(i + "", 100, 100, textPaint);
         }
 
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        vibrator.vibrate(VibrationEffect.createOneShot(i, VibrationEffect.DEFAULT_AMPLITUDE));
+        return true;
     }
 }
