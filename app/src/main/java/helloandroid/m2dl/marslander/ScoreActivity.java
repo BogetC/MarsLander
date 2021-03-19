@@ -36,7 +36,8 @@ public class ScoreActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_score);
         Button playAgainButton = findViewById(R.id.playAgainButton);
         playAgainButton.setOnClickListener(v -> {
-            // Lauch game again
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
     }
 

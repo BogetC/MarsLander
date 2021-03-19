@@ -1,6 +1,7 @@
 package helloandroid.m2dl.marslander;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -31,8 +32,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private int screenWidth;
     private int screenHeight;
 
+    private Context context;
+
     public GameView(Context context, int screenWidth, int screenHeight) {
         super(context);
+        this.context = context;
         getHolder().addCallback(this);
 
         this.setSystemUiVisibility(
@@ -112,6 +116,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void finishGame() {
-        this.setPaused(true);
+        Intent intent = new Intent(this.context, ScoreActivity.class);
+        this.context.startActivity(intent);
     }
 }
