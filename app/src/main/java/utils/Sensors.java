@@ -6,35 +6,26 @@ import android.os.Handler;
 import android.util.Log;
 
 import helloandroid.m2dl.marslander.GameView;
+import helloandroid.m2dl.marslander.MainActivity;
 
 public class Sensors {
     private SensorManager sensorManager;
     private GameView gameView;
+    private MainActivity mainActivity;
 
     private Sensor lightSensor;
     private Sensor accelerometerSensor;
-    private float[] maxValuesLightSensor;
-    private boolean canJump;
-    private Handler handler;
+    private float[] maxValuesLightSensor, minValuesLightSensor;
+    private float lightSensorCover;
 
-    private Runnable setCanJump = () -> { canJump = true; };
-    private long lastUpdateLightSensor;
 
-    public Sensors(SensorManager sensorManager, GameView gameView) {
+    public Sensors(SensorManager sensorManager, GameView gameView, MainActivity mainActivity) {
         this.sensorManager = sensorManager;
         this.gameView = gameView;
+        this.mainActivity = mainActivity;
         this.maxValuesLightSensor = new float[]{0, 0, 0, 0, 0};
-        this.lastUpdateLightSensor = 0;
-        this.canJump = true;
-        this.handler = new Handler();
-    }
-
-    public boolean canJump() {
-        return canJump;
-    }
-
-    public void setCanJump(boolean canJump) {
-        this.canJump = canJump;
+        this.minValuesLightSensor = new float[]{0, 0, 0, 0, 0};
+        this.lightSensorCover = 0;
     }
 
     public Sensor getAccelerometerSensor() {
@@ -70,6 +61,19 @@ public class Sensors {
         return -1;
     }
 
+    private int getMaxPosition(float[] t) {
+        if(t != null && t.length >= 0) {
+            int max = 0;
+            for(int i = 0 ; i < t.length ; i++) {
+                if (t[i] > t[max]) {
+                    max = i;
+                }
+            }
+            return max;
+        }
+        return -1;
+    }
+
     private float getMaxValueLightSensor() {
         return maxValuesLightSensor[getMinPosition(maxValuesLightSensor)];
     }
@@ -82,12 +86,43 @@ public class Sensors {
         }
     }
 
+    private void checkMinValueLightSensor(float value) {
+        int maxPosition = getMaxPosition(minValuesLightSensor);
+        if (value < minValuesLightSensor[maxPosition]) {
+            minValuesLightSensor[maxPosition] = value;
+        }
+    }
+
+    private void updateCoveredLightSensorValues(float value) {
+        checkMinValueLightSensor(value);
+    }
+
     public void updateLightSensor(float value) {
         checkMaxValueLightSensor(value);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastUpdateLightSensor > 1000) {
-            lastUpdateLightSensor = System.currentTimeMillis();
+        calcLightSensorCover(value);
+        System.out.println("COVER : " + this.lightSensorCover + "%");
+        if(isCoveredLightSensor(value)) {
+            updateCoveredLightSensorValues(value);
+        } else {
+            mainActivity.startCounter();
         }
+    }
+
+    public boolean isCoveredLightSensor(float value) {
+        return (value < getMaxValueLightSensor()*0.2);
+    }
+
+    public void calcLightSensorCover(float value) {
+        float cover = 100 - (((value / getMaxValueLightSensor()) - getCoveredValueLightSensor()) * 100);
+        this.lightSensorCover = (0 < cover && cover < 94) ? cover : (cover < 0 ? 0 : 94);
+    }
+
+    public float getCoveredValueLightSensor() {
+        return minValuesLightSensor[getMaxPosition(minValuesLightSensor)];
+    }
+
+    public float getLightSensorCover() {
+        return lightSensorCover;
     }
 
     public void updateAccelerometerSensor(float[] values) {

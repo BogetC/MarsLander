@@ -68,8 +68,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         this.handler = new Handler();
         this.menuLayout = (View) findViewById(R.id.menu_layout);
         this.circularProgressBar = findViewById(R.id.circularProgressBar);
-        this.startCounter();
-        this.sensors = new Sensors(((SensorManager) getSystemService(Context.SENSOR_SERVICE)), gameView);
+//        this.startCounter();
+        this.sensors = new Sensors(((SensorManager) getSystemService(Context.SENSOR_SERVICE)), gameView, this);
         this.sensors.setLightSensor(this.sensors.getSensorManager().getDefaultSensor(Sensor.TYPE_LIGHT));
         this.sensors.setAccelerometerSensor(this.sensors.getSensorManager().getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
 
@@ -110,8 +110,9 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     public void startCounter() {
+        this.handler.removeCallbacks(this.count);
         this.counter_time = getResources().getInteger(R.integer.counter_max);
-        this.circularProgressBar.setProgress(0);
+        this.circularProgressBar.setProgressWithAnimation(0, 100l);
         this.handler.postDelayed(this.count, 1000);
     }
 
