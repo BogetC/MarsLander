@@ -3,6 +3,7 @@ package utils;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Handler;
+import android.util.Log;
 
 import helloandroid.m2dl.marslander.GameView;
 
@@ -83,7 +84,6 @@ public class Sensors {
 
     public void updateLightSensor(float value) {
         checkMaxValueLightSensor(value);
-
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastUpdateLightSensor > 1000) {
             lastUpdateLightSensor = System.currentTimeMillis();
