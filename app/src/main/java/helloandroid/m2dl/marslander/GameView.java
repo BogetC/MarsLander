@@ -39,16 +39,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.context = context;
         getHolder().addCallback(this);
 
-        this.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight + 70;
 
 
         int roverSize = 120;
         int xRover = screenWidth / 2 - roverSize / 2;
-        int yRover = screenHeight / 2 - roverSize / 2;
+        int yRover = (int) (screenHeight / 1.61 - roverSize / 2);
 
         this.rover = new Rover(new Position(xRover, yRover), roverSize, context);
         this.gameThread = new GameThread(getHolder(), this);

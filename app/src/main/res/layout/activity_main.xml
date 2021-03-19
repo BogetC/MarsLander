@@ -24,7 +24,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/orbitron_medium"
             android:text="@string/app_name"
-            android:textSize="70sp" />
+            android:textSize="70sp"
+            android:textColor="@color/grayDark"/>
 
         <TextView
             android:id="@+id/textView"
@@ -33,7 +34,8 @@
             android:fontFamily="@font/orbitron_medium"
             android:gravity="center_horizontal"
             android:text="@string/home_instruction"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:textColor="@color/grayDark"/>
 
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
             android:id="@+id/circularProgressBar"
