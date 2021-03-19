@@ -34,6 +34,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private Context context;
 
+    private int time;
+    private final int maxAltitude = 10000;
+    private int currentAltitude = this.maxAltitude;
+
     public GameView(Context context, int screenWidth, int screenHeight) {
         super(context);
         this.context = context;
@@ -44,6 +48,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight + 70;
+
 
 
         int roverSize = 120;
