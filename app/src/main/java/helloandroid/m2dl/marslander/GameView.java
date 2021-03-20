@@ -119,10 +119,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     this.a0 = 11;
                 }
                 this.altitude = (int) (this.altitude - this.v0 * 0.1 + 1/2 * this.a0 * Math.sqrt(0.1));
-                if (this.altitude > this.maxAltitude) {
-                    this.altitude = this.maxAltitude;
-                }
                 this.v0 = (int) (this.v0 + this.a0 * 0.1);
+                if (this.altitude >= this.maxAltitude) {
+                    this.altitude = this.maxAltitude;
+                    this.v0 = 0;
+                }
                 Log.d("D", String.valueOf(altitude));
             }
 
@@ -130,6 +131,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if (!this.paused) {
                 this.altitude = this.altitude - 0.1F;
                 if (this.altitude <= 0) {
+                    this.altitude = 0; // for display
                     if (this.v0 > -2000) {
                         this.finishGame();
                     } else {
