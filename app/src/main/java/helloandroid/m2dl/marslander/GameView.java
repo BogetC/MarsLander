@@ -131,6 +131,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if (!this.paused) {
                 this.altitude = this.altitude - 0.1F;
                 if (this.altitude <= 0) {
+                    this.altitude = 0; // for display
                     if (this.v0 > -2000) {
                         this.finishGame();
                     } else {
