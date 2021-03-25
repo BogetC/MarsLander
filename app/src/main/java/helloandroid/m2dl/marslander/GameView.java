@@ -168,7 +168,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 Log.d("1", "GO");
                 Random random2 = new Random();
                 this.waX = random2.nextInt(15 - 10 + 1) + 10;
-                this.waX = random2.nextInt(15 - 10 + 1) + 10;
+                this.waY = random2.nextInt(15 - 10 + 1) + 10;
 
                 if (Math.random() < 0.5) {
                     this.waX = this.waX * -1;
