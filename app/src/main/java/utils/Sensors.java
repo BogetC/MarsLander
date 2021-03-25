@@ -1,8 +1,11 @@
 package utils;
 
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 
 import helloandroid.m2dl.marslander.GameView;
@@ -15,6 +18,7 @@ public class Sensors {
 
     private Sensor lightSensor;
     private Sensor accelerometerSensor;
+    private Vibrator vibrator;
     private float[] maxValuesLightSensor, minValuesLightSensor;
     private float lightSensorCover;
 
@@ -26,6 +30,7 @@ public class Sensors {
         this.maxValuesLightSensor = new float[]{0, 0, 0, 0, 0};
         this.minValuesLightSensor = new float[]{0, 0, 0, 0, 0};
         this.lightSensorCover = 0;
+        this.vibrator = (Vibrator) mainActivity.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     public Sensor getAccelerometerSensor() {
@@ -104,6 +109,7 @@ public class Sensors {
         this.gameView.setThrust(value);
         if(isCoveredLightSensor(value)) {
             updateCoveredLightSensorValues(value);
+            vibrate();
         } else {
             mainActivity.startCounter();
         }
@@ -138,5 +144,12 @@ public class Sensors {
         float y = values[1] * magicNumber;
 
         this.gameView.updateAcceleration((int) y, (int) x);
+    }
+
+    private void vibrate() {
+        vibrator.vibrate(VibrationEffect.createOneShot((int) this.lightSensorCover*100, VibrationEffect.DEFAULT_AMPLITUDE));
+        vibrator.cancel();
+//        vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+
     }
 }
