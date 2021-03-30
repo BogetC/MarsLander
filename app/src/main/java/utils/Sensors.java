@@ -109,7 +109,8 @@ public class Sensors {
         this.gameView.setThrust(value);
         if(isCoveredLightSensor(value)) {
             updateCoveredLightSensorValues(value);
-            vibrate();
+            if (!this.gameView.isPaused())
+                vibrate();
         } else {
             mainActivity.startCounter();
         }
