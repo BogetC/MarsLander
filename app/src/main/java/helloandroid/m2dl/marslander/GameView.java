@@ -159,7 +159,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             rover.setSpeed(newSpeed);
 
             if (!this.rover.getPosition().isBetween(0, this.screenWidth - this.rover.getSize(), 0, this.screenHeight - this.rover.getSize())) {
-                this.crash();
+                this.loseSignal();
             }
 
             // Spawn wind
@@ -209,11 +209,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.waY = y;
     }
 
+    public boolean isPaused() {
+        return paused;
+    }
+
     public void setPaused(boolean paused) {
         this.paused = paused;
     }
 
     public void finishGame() {
+        this.setPaused(true);
         this.endTime = new Date().getTime();
         long score = this.endTime - this.startTime;
         this.gameThread.setRunning(false);
@@ -227,8 +232,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void crash() {
+        this.setPaused(true);
         this.gameThread.setRunning(false);
         Intent intent = new Intent(this.context, FailToLandActivity.class);
+        this.context.startActivity(intent);
+    }
+
+    public void loseSignal() {
+        this.setPaused(true);
+        this.gameThread.setRunning(false);
+        Intent intent = new Intent(this.context, SignalLostActivity.class);
         this.context.startActivity(intent);
     }
 

@@ -2,5 +2,7 @@
     <string name="app_name">MarsLander</string>
     <string name="home_instruction">Put your finger on the light sensor</string>
     <string name="fail_to_land_message">You landed too fast and crashed, you just wasted <font color="#F44336">3.2 billion dollars</font> !</string>
+    <string name="signal_lost_message">The rover has disappeared from our radar, we have definitely lost its signal !</string>
+    <string name="signal_lost_content_description">Signal lost icon</string>
     <string name="retry_button">Retry</string>
 </resources>
